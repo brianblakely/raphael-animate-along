@@ -17,7 +17,7 @@ callback - Function where the "this" object refers to the element itself
 
 EXAMPLE
 =======
-var rect = paper.rect(50,50,0,0);
+var rect = paper.rect(0,0,50,50);
 rect.animateAlong({
 	path: "M0,0L100,100",
 	rotate: true,
