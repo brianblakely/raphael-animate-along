@@ -11,7 +11,7 @@ element.animateAlong({
 	duration: OPTIONAL - Number in milliseconds
 	easing: OPTIONAL - String (see Raphaël's docs)
 },
-props - Object containing other properties to animate,
+props - Object literal containing other properties to animate,
 callback - Function where the "this" object refers to the element itself
 );
 
@@ -27,7 +27,8 @@ rect.animateAlong({
 {
 	transform: 's0.25',
 	opacity: 0
-}, function() {
+},
+function() {
 	alert("Our opacity is now:" + this.attr('opacity'));
 });
 
