@@ -85,8 +85,8 @@ Raphael.el.animateAlong = function(params, props, callback) {
 	var startAlong = element.attr('along') || 0;
 	
 	element.attr({along: startAlong}).animate(props, duration, easing, function() {
-		this.path.remove();
+		!isElem && element.path.remove();
 		
-		callback && callback.call(this);
+		callback && callback.call(element);
 	});
 };
