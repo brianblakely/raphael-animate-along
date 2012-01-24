@@ -8,8 +8,10 @@ USAGE (same default values for optional parameters as Raphaël's "animate" metho
 element.animateAlong({
 	path: REQUIRED - Path data string or path element,
 	rotate: OPTIONAL - Boolean whether to rotate element with the direction it is moving,
-	duration: OPTIONAL - Number in milliseconds
-	easing: OPTIONAL - String (see Raphaël's docs)
+	duration: OPTIONAL - Number in milliseconds,
+	easing: OPTIONAL - String (see Raphaël's docs),
+	debug: OPTIONAL - Boolean, when set to true, paints the animating path, which is
+					  helpful if it isn't already rendered to the screen
 },
 props - Object literal containing other properties to animate,
 callback - Function where the "this" object refers to the element itself
@@ -22,7 +24,8 @@ rect.animateAlong({
 	path: "M0,0L100,100",
 	rotate: true,
 	duration: 5000,
-	easing: 'ease-out'
+	easing: 'ease-out',
+	debug: true
 },
 {
 	transform: 's0.25',
@@ -40,18 +43,20 @@ Raphael.el.animateAlong = function(params, props, callback) {
 		path = params.path,
 		rotate = params.rotate,
 		duration = params.duration,
-		easing = params.easing;
-
+		easing = params.easing,
+		debug = params.debug,
+		isElem = typeof path !== 'string';
+	
 	element.path = 
-		typeof path === 'string'
-			? paper.path(path)
-			: path;
+		isElem
+			? path
+			: paper.path(path);
 	element.pathLen = element.path.getTotalLength();
 	element.rotateWith = rotate;
 	
 	element.path.attr({
-		stroke: 'rgba(0,0,0,0)',
-		'stroke-width': 0
+		stroke: debug ? 'red' : isElem ? path.attr('stroke') : 'rgba(0,0,0,0)',
+		'stroke-width': debug ? 2 : isElem ? path.attr('stroke-width') : 0
 	});
 
 	paper.customAttributes.along = function(v) {
