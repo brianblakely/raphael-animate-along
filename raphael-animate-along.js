@@ -7,7 +7,9 @@ USAGE (same default values for optional parameters as Raphaël's "animate" metho
 =====
 element.animateAlong({
 	path: REQUIRED - Path data string or path element,
-	rotate: OPTIONAL - Boolean whether to rotate element with the direction it is moving,
+	rotate: OPTIONAL - Boolean whether to rotate element with the direction it is moving
+	                   (this is a beta feature - currently kills existing transformations
+	                    and rotation may not be perfect),
 	duration: OPTIONAL - Number in milliseconds,
 	easing: OPTIONAL - String (see Raphaël's docs),
 	debug: OPTIONAL - Boolean, when set to true, paints the animating path, which is
@@ -60,14 +62,16 @@ Raphael.el.animateAlong = function(params, props, callback) {
 	});
 
 	paper.customAttributes.along = function(v) {
-		var point = this.path.getPointAtLength(v * this.pathLen);
+		var point = this.path.getPointAtLength(v * this.pathLen),
+			attrs = {
+				x: point.x,
+				y: point.y 
+			};
+		this.rotateWith && (attrs.transform = 'r'+point.alpha);
+		// TODO: rotate along a path while also not messing
+		//       up existing transformations
 		
-		this.rotateWith && this.rotate(point.alpha);
-		
-		return {
-			x: point.x,
-			y: point.y
-		};
+		return attrs;
 	};
 
 	if(props instanceof Function) {
